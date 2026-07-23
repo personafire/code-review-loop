@@ -1,0 +1,11 @@
+{
+  "name": "code-review-loop",
+  "owner": { "name": "Personafire" },
+  "plugins": [
+    {
+      "name": "review-loop",
+      "source": "./plugins/review-loop",
+      "description": "Multi-agent code review loop that auto-fixes safe findings and re-reviews until clean."
+    }
+  ]
+}

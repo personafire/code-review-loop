@@ -1,0 +1,6 @@
+{
+  "name": "review-loop",
+  "description": "Multi-agent code review loop that auto-fixes safe findings and re-reviews until clean.",
+  "version": "0.1.0",
+  "author": { "name": "Personafire" }
+}
