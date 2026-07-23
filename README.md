@@ -3,16 +3,65 @@
 A portable multi-agent code-review-loop skill for coding agents. It fans out
 reviewer personas, merges findings, auto-applies the safe fixes, verifies
 nothing broke, and re-reviews until the diff is clean or only human decisions
-remain. All logic lives in one `SKILL.md`; each tool loads it via a thin adapter.
+remain. All logic lives in one core `SKILL.md`; each tool gets it via a thin
+adapter or a self-contained copy generated from that core.
 
 ## Install
 
-| Tool | Global / Local | Steps |
-|------|----------------|-------|
-| Claude Code | both | `/plugin marketplace add personafire/code-review-loop` then `/plugin install review-loop@code-review-loop` |
-| Cursor | both | consume the same marketplace, or copy `.cursor/commands/review-loop.md` into your repo's `.cursor/commands/` |
-| OpenCode | both | add `"review-loop@git+https://github.com/personafire/code-review-loop.git"` to the `plugin` array in `opencode.json` (see `.opencode/INSTALL.md`) |
-| Codex | both | copy `codex/prompts/review-loop.md` into `~/.codex/prompts/` (global) or the project prompts dir (local) |
+All four tools support a global install (available in every project) and a local
+install (scoped to one repo). Each command below is its own copy-paste block.
+
+### Claude Code
+
+Register the marketplace:
+
+```text
+/plugin marketplace add personafire/code-review-loop
+```
+
+Install the plugin — choose **User** scope when prompted for a global install, or
+**Project**/**Local** to scope it to the current repo:
+
+```text
+/plugin install review-loop@code-review-loop
+```
+
+### OpenCode
+
+OpenCode uses its own plugin install — set it up separately even if you already
+use this in another tool.
+
+Tell OpenCode:
+
+```text
+Fetch and follow instructions from https://raw.githubusercontent.com/personafire/code-review-loop/main/.opencode/INSTALL.md
+```
+
+Detailed docs: [`.opencode/INSTALL.md`](.opencode/INSTALL.md)
+
+### Cursor
+
+Consume the same marketplace via Cursor's plugin UI, or copy the adapter into the
+target repo:
+
+```bash
+mkdir -p .cursor/commands
+curl -sSL https://raw.githubusercontent.com/personafire/code-review-loop/main/.cursor/commands/review-loop.md \
+  -o .cursor/commands/review-loop.md
+```
+
+### Codex
+
+Copy the prompt into your Codex prompts directory — `~/.codex/prompts/` for a
+global install, or the project prompts dir for a local one:
+
+```bash
+mkdir -p ~/.codex/prompts
+curl -sSL https://raw.githubusercontent.com/personafire/code-review-loop/main/codex/prompts/review-loop.md \
+  -o ~/.codex/prompts/review-loop.md
+```
+
+---
 
 Trigger with `/review-loop` (or OpenCode's skill tool where slash commands aren't used).
 

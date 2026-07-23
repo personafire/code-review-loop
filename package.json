@@ -5,5 +5,8 @@
   "type": "module",
   "main": ".opencode/plugin.js",
   "author": "Personafire",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "build:adapters": "node scripts/build-adapters.mjs"
+  }
 }
