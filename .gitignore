@@ -1,0 +1,5 @@
+# Internal planning artifacts — not part of the shippable plugin
+/specs/
+/plans/
+
+.DS_Store
