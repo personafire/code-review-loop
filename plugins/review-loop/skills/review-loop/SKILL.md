@@ -29,7 +29,7 @@ their findings, auto-apply the safe fixes, verify nothing broke, then re-review
 Read `references/personas.md`. Always run: correctness, maintainability,
 test-coverage. Add conditional personas only when the diff's files/contents
 match their trigger signals (security, performance, api-contract,
-data/migrations, concurrency). Do not spin up personas the diff doesn't warrant.
+data-migrations, concurrency). Do not spin up personas the diff doesn't warrant.
 
 ### 3. Fan out reviewers
 - Where the tool supports parallel subagents, dispatch one per selected persona
