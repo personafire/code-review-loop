@@ -1,0 +1,9 @@
+{
+  "name": "review-loop",
+  "version": "0.1.0",
+  "description": "Multi-agent code review loop that auto-fixes safe findings and re-reviews until clean — OpenCode plugin entry.",
+  "type": "module",
+  "main": ".opencode/plugin.js",
+  "author": "Personafire",
+  "license": "MIT"
+}
