@@ -1,7 +1,8 @@
 {
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "review-loop",
-  "description": "Multi-agent code review loop that auto-fixes safe findings and re-reviews until clean.",
   "version": "0.1.0",
+  "description": "Multi-agent code review loop that auto-fixes safe findings and re-reviews until clean.",
   "author": { "name": "Personafire" },
   "repository": "https://github.com/personafire/code-review-loop",
   "license": "MIT",
