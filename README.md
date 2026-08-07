@@ -67,11 +67,24 @@ Trigger with `/review-loop` (or OpenCode's skill tool where slash commands aren'
 
 ## What a run does
 1. Resolves the target (dirty tree → working diff; clean → branch-vs-base; override wins).
-2. Selects reviewer personas by what the diff touches.
+2. Selects reviewer personas — four always, plus conditional ones by what the diff touches.
 3. Fans them out, merges + dedupes findings.
 4. Auto-applies high-confidence non-risky fixes; human-gates the rest; verifies via tests/lint/build.
 5. Re-reviews until clean, only human items remain, or the iteration cap hits.
 6. Reports; leaves fixes as a reviewable diff (never auto-commits).
+
+## What gets reviewed
+**correctness**, **maintainability**, **test-coverage**, and **comment-quality**
+run on every diff. **security**, **performance**, **api-contract**,
+**data-migrations**, and **concurrency** join only when the diff touches their
+surface.
+
+comment-quality holds every comment the diff writes to one test: does it say
+something the code and `git log` cannot? It cuts restated code, history the VCS
+already carries, review narration, decision journals, and bare TODOs — and flags
+comments the change made stale. License headers, lint pragmas, and
+convention-required docs are never touched. Full standard:
+[`comment-standard.md`](plugins/review-loop/skills/review-loop/references/comment-standard.md).
 
 ## Verify it loads (per tool)
 1. Install via the tool's mechanism (test both global and local).

@@ -13,6 +13,7 @@ their findings, auto-apply the safe fixes, verify nothing broke, then re-review
 - `references/personas.md` — which reviewers exist and when each is triggered
 - `references/findings-schema.md` — the structured finding shape all reviewers return
 - `references/severity-rubric.md` — severity levels, risky surfaces, the fix gate
+- `references/comment-standard.md` — the bar every new comment has to clear
 - `references/config.md` — tunable defaults (iteration cap, confidence threshold, risky list)
 
 ## Procedure
@@ -27,8 +28,8 @@ their findings, auto-apply the safe fixes, verify nothing broke, then re-review
 
 ### 2. Select the panel
 Read `references/personas.md`. Always run: correctness, maintainability,
-test-coverage. Add conditional personas only when the diff's files/contents
-match their trigger signals (security, performance, api-contract,
+test-coverage, comment-quality. Add conditional personas only when the diff's
+files/contents match their trigger signals (security, performance, api-contract,
 data-migrations, concurrency). Do not spin up personas the diff doesn't warrant.
 
 ### 3. Fan out reviewers
@@ -45,6 +46,9 @@ Per `severity-rubric.md`:
 - **Human-gate** (report, do not change) when confidence is below threshold,
   reviewers disagree, or the fix touches a risky surface (public API, migrations,
   security-category findings, deletions).
+- Cutting or rewriting a comment this diff introduced is not a risky deletion —
+  it auto-applies on the normal confidence rule. Removing a comment the diff did
+  not write is human-gated.
 - After applying, **verify**: detect and run the repo's tests / lint / build. If
   a fix breaks them, revert that fix and move it to the human gate.
 
