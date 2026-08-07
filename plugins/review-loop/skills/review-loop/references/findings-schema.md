@@ -6,7 +6,7 @@ Every reviewer returns a list of findings, each with these fields:
 |-------|------|-------|
 | `file` | string | repo-relative path |
 | `line` | integer | 1-indexed; best-effort anchor |
-| `category` | enum | correctness \| maintainability \| test-coverage \| security \| performance \| api-contract \| data-migrations \| concurrency |
+| `category` | enum | correctness \| maintainability \| test-coverage \| comment-quality \| security \| performance \| api-contract \| data-migrations \| concurrency |
 | `severity` | enum | critical \| high \| medium \| low |
 | `confidence` | number | 0.0–1.0 |
 | `problem` | string | one-sentence statement of the defect |

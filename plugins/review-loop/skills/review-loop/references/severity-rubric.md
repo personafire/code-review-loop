@@ -21,6 +21,11 @@ Human-gate (report only, never auto-change) when ANY of:
 - the fix touches a **risky surface**: public/exported API, migrations,
   security-category findings (always), or deletions of code/data.
 
+**Comment fixes are not risky deletions.** Cutting or rewording a comment this
+diff introduced is text-only and reversible, so it auto-applies on the normal
+confidence rule. Two exceptions stay human-gated: removing a comment the diff did
+not write, and anything on the never-flag list in `comment-standard.md`.
+
 ## Verify-after-fix
 After applying auto-fixes, run the repo's tests/lint/build. If any fix breaks
 them, revert that specific fix and move it to the human gate.

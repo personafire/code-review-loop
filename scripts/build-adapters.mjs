@@ -24,7 +24,7 @@ function skillProcedure() {
     .trim();
 }
 
-const refs = ["personas.md", "findings-schema.md", "severity-rubric.md", "config.md"]
+const refs = ["personas.md", "findings-schema.md", "severity-rubric.md", "comment-standard.md", "config.md"]
   .map((f) => read(join("references", f)).trim());
 
 const body = [
