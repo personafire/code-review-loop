@@ -53,10 +53,20 @@ report and ignore. So a stray field or a typo'd `$schema` parses fine and then f
 every client.
 
 Agent Plugins 1.0 covers skills and MCP servers only — commands, hooks, and agents are
-explicitly out of scope. `commands/review-loop.md` stays Claude Code-specific, and the
-Cursor, Codex, and OpenCode adapters stay as they are. To attach client-specific data to
-`plugin.json`, the spec's sanctioned slot is the `extensions` object, keyed by
-reverse-domain namespace. Nothing here needs it yet.
+explicitly out of scope. The Cursor, Codex, and OpenCode adapters stay as they are. To
+attach client-specific data to `plugin.json`, the spec's sanctioned slot is the
+`extensions` object, keyed by reverse-domain namespace. Nothing here needs it yet.
+
+## Don't add a `commands/` wrapper
+
+The plugin ships the skill and nothing else. A `commands/review-loop.md` alongside
+`skills/review-loop/` is a name collision, not a convenience: Claude Code names both
+components `<plugin>:<file-or-dir>`, so the two register under the identical name
+`review-loop:review-loop`. Deduplication is by file path, not by name, so both load and
+the command shadows the skill in the picker. Invoking it then runs the wrapper, which has
+to hop to the skill — and because the skill-content cache is keyed on that same shared
+name, the hop can be elided as an already-loaded re-invocation, leaving the model with a
+pointer and no procedure.
 
 ## Checks before opening a PR
 
