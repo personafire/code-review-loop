@@ -1,6 +1,7 @@
 ---
 name: review-loop
 description: Use when the user wants a code review before committing/opening a PR, or says "review this", "review loop", "check my changes". Runs a multi-agent review that auto-fixes safe findings and re-reviews until clean.
+argument-hint: "[light|deep] and/or a target (PR number, branch, staged, paths)"
 ---
 
 # Code Review Loop
@@ -8,6 +9,23 @@ description: Use when the user wants a code review before committing/opening a P
 Run an iterative, multi-agent code review: fan out reviewer personas, merge
 their findings, auto-apply the safe fixes, verify nothing broke, then re-review
 — repeating until the diff is clean or only human decisions remain.
+
+## Arguments
+
+`$ARGUMENTS` holds whatever followed the invocation — a depth word, a target
+override, both, or nothing. Read each independently.
+
+**Depth** sets the panel and the iteration cap. It never loosens the fix gate:
+what auto-applies is the same at every depth.
+
+| Depth | Panel | Iteration cap |
+|-------|-------|---------------|
+| `light` | the four always-on personas; skip every conditional | 1 |
+| *(absent)* | always-on plus conditionals the diff triggers | config `max_iterations` |
+| `deep` | every persona, conditionals included whether or not the diff triggers them | config `max_iterations` + 2 |
+
+**Target override** — a PR number/URL, a branch name, `staged`, or file paths.
+Feeds step 1. Anything that isn't a depth word is a target.
 
 ## Reference files (read as needed)
 - `references/personas.md` — which reviewers exist and when each is triggered
@@ -24,13 +42,15 @@ their findings, auto-apply the safe fixes, verify nothing broke, then re-review
   `main`, then `master` (first that exists and is an ancestor).
 - Override always wins: a PR number/URL, an explicit branch, `staged`
   (`git diff --cached`), or explicit file paths passed by the user.
-- State the resolved target back to the user before reviewing.
+- State the resolved target back to the user before reviewing, along with the
+  depth if one was passed.
 
 ### 2. Select the panel
 Read `references/personas.md`. Always run: correctness, maintainability,
 test-coverage, comment-quality. Add conditional personas only when the diff's
 files/contents match their trigger signals (security, performance, api-contract,
 data-migrations, concurrency). Do not spin up personas the diff doesn't warrant.
+The depth argument overrides this both ways — see **Arguments**.
 
 ### 3. Fan out reviewers
 - Where the tool supports parallel subagents, dispatch one per selected persona
@@ -54,9 +74,9 @@ Per `severity-rubric.md`:
 
 ### 5. Converge, then loop
 Re-run the panel on the new diff. Stop when any of: no auto-fixable findings
-remain, only human-gated items are left, or the iteration cap (config default 3)
-is hit. If the same finding reappears after being "fixed" (oscillation), stop and
-human-gate it.
+remain, only human-gated items are left, or the iteration cap is hit (config
+default 3; the depth argument can override it). If the same finding reappears
+after being "fixed" (oscillation), stop and human-gate it.
 
 ### 6. Report
 Summarize: what was found, what was auto-fixed, what needs a human decision, and

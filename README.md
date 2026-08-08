@@ -63,7 +63,42 @@ curl -sSL https://raw.githubusercontent.com/personafire/code-review-loop/main/co
 
 ---
 
-Trigger with `/review-loop` (or OpenCode's skill tool where slash commands aren't used).
+## Trigger it
+
+```text
+/review-loop
+```
+
+Or OpenCode's skill tool, where slash commands aren't used.
+
+Claude Code namespaces every plugin component, so its picker lists this as
+`/review-loop:review-loop`. Typing the short `/review-loop` still resolves — the
+skill registers it as an alias.
+
+### Depth and target
+
+Anything after the command is passed through. A depth word tunes the run; anything
+else is read as a target override.
+
+```text
+/review-loop light        # always-on personas only, single pass
+/review-loop deep         # every persona, whether or not the diff triggers it
+/review-loop 412          # review PR 412 instead of the working tree
+/review-loop deep staged  # both
+```
+
+| Depth | Panel | Iteration cap |
+|-------|-------|---------------|
+| `light` | the four always-on personas; skips conditionals | 1 |
+| *(default)* | always-on plus conditionals the diff triggers | 3 |
+| `deep` | every persona, conditionals included unconditionally | 5 |
+
+Depth changes what gets reviewed and how long the loop runs. It never changes what
+auto-applies — the confidence-and-risk gate is the same at every depth.
+
+A target override is a PR number or URL, a branch name, `staged`, or file paths.
+With no target, the loop resolves one itself: dirty tree → the working diff, clean
+tree → branch-vs-base.
 
 ## What a run does
 1. Resolves the target (dirty tree → working diff; clean → branch-vs-base; override wins).
@@ -92,3 +127,4 @@ convention-required docs are never touched. Full standard:
 3. Trigger `/review-loop`.
 4. Confirm it states the resolved target and produces a findings report.
 5. Confirm auto-fix → verify → re-review runs and the loop stops correctly.
+6. Trigger `/review-loop light` and confirm it names the depth back and runs one pass.
